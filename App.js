@@ -16,6 +16,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import HistoricalEvents from './screens/listItems/HistoricalEvents';
+
 import AsyncStorage from '@react-native-community/async-storage';
 
 const App = () => {
@@ -39,7 +41,7 @@ const App = () => {
     }
   };
 
-  return <Text style={styles.footer}>Tutaj ma byc lista Eventow spacex</Text>;
+  return <HistoricalEvents />;
 };
 
 const styles = StyleSheet.create({

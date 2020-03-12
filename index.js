@@ -1,78 +1,42 @@
-import {AppRegistry} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import App from './App';
-import TeslaCar from './screens/TeslaCar';
 
-Navigation.registerComponent('Events', () => App);
-Navigation.registerComponent('TeslaCar', () => TeslaCar);
+import Launches from './screens/listItems/Launches';
+import Missions from './screens/listItems/Missions';
+import Rockets from './screens/listItems/Rockets';
+
+import HistoricalEventDetails from './screens/oneItem/HistoricalEventDetails';
+import LaunchDetails from './screens/oneItem/LaunchDetails';
+import MissionDetails from './screens/oneItem/MissionDetails';
+import RocketDetails from './screens/oneItem/RocketDetails';
+import TeslaCarDetails from './screens/oneItem/TeslaCarDetails';
+
+//list
+Navigation.registerComponent('HistoricalEvents', () => App);
+Navigation.registerComponent('Launches', () => Launches);
+Navigation.registerComponent('Missions', () => Missions);
+Navigation.registerComponent('Rockets', () => Rockets);
+//one item details
+Navigation.registerComponent(
+  'HistoricalEventDetails',
+  () => HistoricalEventDetails,
+);
+Navigation.registerComponent('LaunchDetails', () => LaunchDetails);
+Navigation.registerComponent('MissionDetails', () => MissionDetails);
+Navigation.registerComponent('RocketDetails', () => RocketDetails);
+Navigation.registerComponent('TeslaCarDetails', () => TeslaCarDetails);
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot({
     root: {
-      bottomTabs: {
+      stack: {
         children: [
           {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'Events',
-                    passProps: {
-                      title: 'Events',
-                    },
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Events',
-                  testID: 'FIRST_TAB_BAR_BUTTON',
-                },
-              },
+            component: {
+              // id: 'component1', // Optional, Auto generated if empty
+              name: 'HistoricalEvents',
             },
           },
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'TeslaCar',
-                    passProps: {
-                      title: 'TeslaCar',
-                    },
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Tesla Car',
-                  testID: 'FIRST_TAB_BAR_BUTTON2',
-                },
-              },
-            },
-          },
-          //nastepny widok
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'TeslaCar',
-                    passProps: {
-                      title: 'TeslaCar',
-                    },
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Tesla Car',
-                  testID: 'FIRST_TAB_BAR_BUTTON2',
-                },
-              },
-            },
-          },
-          //koniec
         ],
       },
     },
