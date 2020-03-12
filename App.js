@@ -1,20 +1,5 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {StyleSheet} from 'react-native';
 
 import HistoricalEvents from './screens/listItems/HistoricalEvents';
 
@@ -46,7 +31,6 @@ const App = () => {
 
 const styles = StyleSheet.create({
   footer: {
-    color: Colors.dark,
     fontSize: 12,
     fontWeight: '600',
     padding: 4,
