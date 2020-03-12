@@ -1,3 +1,6 @@
+//!dokumentacja SpaceX APi
+//https://docs.spacexdata.com/?version=latest#9211ff07-9f81-41ac-9568-3018dd043e2a
+
 import {Navigation} from 'react-native-navigation';
 import App from './App';
 
