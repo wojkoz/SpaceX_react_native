@@ -11,6 +11,8 @@ import MissionDetails from './screens/oneItem/MissionDetails';
 import RocketDetails from './screens/oneItem/RocketDetails';
 import TeslaCarDetails from './screens/oneItem/TeslaCarDetails';
 
+import Drawer from './screens/drawer/Drawer';
+
 //list
 Navigation.registerComponent('HistoricalEvents', () => App);
 Navigation.registerComponent('Launches', () => Launches);
@@ -26,18 +28,40 @@ Navigation.registerComponent('MissionDetails', () => MissionDetails);
 Navigation.registerComponent('RocketDetails', () => RocketDetails);
 Navigation.registerComponent('TeslaCarDetails', () => TeslaCarDetails);
 
+Navigation.registerComponent('Drawer', () => Drawer);
+
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot({
     root: {
-      stack: {
-        children: [
-          {
-            component: {
-              // id: 'component1', // Optional, Auto generated if empty
-              name: 'HistoricalEvents',
-            },
+      sideMenu: {
+        id: 'sideMenu',
+        left: {
+          component: {
+            id: 'drawerId',
+            name: 'Drawer',
           },
-        ],
+        },
+        center: {
+          stack: {
+            id: 'MAIN_STACK',
+            children: [
+              {
+                component: {
+                  id: 'Events',
+                  name: 'HistoricalEvents',
+                },
+                options: {
+                  //TODO: nie pokazuje tytulu strony glownej
+                  topBar: {
+                    title: {
+                      text: 'Historical Events',
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
       },
     },
   });
