@@ -26,9 +26,6 @@ class Drawer extends Component {
     Navigation.push('MAIN_STACK', {
       component: {
         name: name,
-        passProps: {
-          text: 'Pushed screen',
-        },
         options: {
           topBar: {
             title: {
