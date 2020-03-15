@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, View, TouchableOpacity, FlatList} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
 import {getJSONFromApi} from '../../presenter/Presenter';
@@ -48,8 +48,9 @@ class Launches extends Component {
     return (
       <View>
         <Text>Launches list</Text>
-        <View>
-          {this.state.data.map(item => (
+        <FlatList
+          data={this.state.data}
+          renderItem={({item}) => (
             <TouchableOpacity
               key={Math.random()}
               onPress={() => this.goToDetail(item)}>
@@ -57,8 +58,9 @@ class Launches extends Component {
                 {item.mission_name} {item.flight_number}
               </Text>
             </TouchableOpacity>
-          ))}
-        </View>
+          )}
+          keyExtractor={item => item.mission_name}
+        />
       </View>
     );
   }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, View, TouchableOpacity, FlatList} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
 import {getJSONFromApi} from '../../presenter/Presenter';
@@ -49,15 +49,17 @@ class Rockets extends Component {
     return (
       <View>
         <Text>Rockets list</Text>
-        <View>
-          {this.state.data.map(item => (
+        <FlatList
+          data={this.state.data}
+          renderItem={({item}) => (
             <TouchableOpacity
               key={item.rocket_id}
               onPress={() => this.goToDetail(item)}>
               <Text key={item.rocket_id}>{item.rocket_name}</Text>
             </TouchableOpacity>
-          ))}
-        </View>
+          )}
+          keyExtractor={item => item.rocket_name}
+        />
       </View>
     );
   }

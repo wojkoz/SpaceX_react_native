@@ -52,11 +52,11 @@ Navigation.events().registerAppLaunchedListener(() => {
               {
                 component: {
                   name: 'HistoricalEvents',
-                },
-                options: {
-                  topBar: {
-                    title: {
-                      text: 'Historical Events',
+                  options: {
+                    topBar: {
+                      title: {
+                        text: 'Historical Events',
+                      },
                     },
                   },
                 },
