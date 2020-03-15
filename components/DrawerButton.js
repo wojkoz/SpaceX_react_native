@@ -4,7 +4,10 @@ import {Text, TouchableOpacity, View} from 'react-native';
 const DrawerButton = props => {
   return (
     <View>
-      <TouchableOpacity onPress={props.navigateTo}>
+      <TouchableOpacity
+        key={Math.random()}
+        disabled={props.disable}
+        onPress={props.navigateTo}>
         <Text>{props.title}</Text>
       </TouchableOpacity>
     </View>

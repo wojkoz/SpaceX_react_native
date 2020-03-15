@@ -51,7 +51,9 @@ class Rockets extends Component {
         <Text>Rockets list</Text>
         <View>
           {this.state.data.map(item => (
-            <TouchableOpacity onPress={() => this.goToDetail(item)}>
+            <TouchableOpacity
+              key={item.rocket_id}
+              onPress={() => this.goToDetail(item)}>
               <Text key={item.rocket_id}>{item.rocket_name}</Text>
             </TouchableOpacity>
           ))}

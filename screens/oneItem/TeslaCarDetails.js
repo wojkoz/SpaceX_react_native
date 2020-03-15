@@ -5,6 +5,7 @@ import {getJSONFromApi} from '../../presenter/Presenter';
 
 class TeslaCarDetails extends Component {
   constructor() {
+    super();
     this.state = {
       data: {name: 'empty'},
     };
