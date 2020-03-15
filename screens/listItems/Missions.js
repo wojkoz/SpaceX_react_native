@@ -50,7 +50,9 @@ class Missions extends Component {
         <Text>Missions list</Text>
         <View>
           {this.state.data.map(item => (
-            <TouchableOpacity onPress={() => this.goToDetail(item)}>
+            <TouchableOpacity
+              key={item.mission_id}
+              onPress={() => this.goToDetail(item)}>
               <Text key={item.mission_id}>{item.mission_name}</Text>
             </TouchableOpacity>
           ))}

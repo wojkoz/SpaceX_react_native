@@ -6,6 +6,15 @@ import DrawerButton from '../../components/DrawerButton';
 class Drawer extends Component {
   constructor() {
     super();
+    this.state = {
+      active: {
+        HistoricalEvents: true,
+        Launches: false,
+        Missions: false,
+        Rockets: false,
+        TeslaCarDetails: false,
+      },
+    };
   }
 
   hideSideMenu = () => {
@@ -22,13 +31,14 @@ class Drawer extends Component {
     if (title === '') {
       title = name;
     }
+
     this.hideSideMenu();
+
+    //actual navigation
+
     Navigation.push('MAIN_STACK', {
       component: {
         name: name,
-        passProps: {
-          text: 'Pushed screen',
-        },
         options: {
           topBar: {
             title: {
@@ -48,24 +58,29 @@ class Drawer extends Component {
         </View>
         <View>
           <DrawerButton
+            disable={this.state.active.Rockets}
             title="Rockets"
             navigateTo={() => this.navigateToScreen('Rockets')}
           />
           <DrawerButton
+            disable={this.state.active.HistoricalEvents}
             title="Historical Events"
             navigateTo={() =>
               this.navigateToScreen('HistoricalEvents', 'Historical Events')
             }
           />
           <DrawerButton
+            disable={this.state.active.Launches}
             title="Launches"
             navigateTo={() => this.navigateToScreen('Launches')}
           />
           <DrawerButton
+            disable={this.state.active.Missions}
             title="Missions"
             navigateTo={() => this.navigateToScreen('Missions')}
           />
           <DrawerButton
+            disable={this.state.active.TeslaCarDetails}
             title="Tesla Car"
             navigateTo={() =>
               this.navigateToScreen('TeslaCarDetails', 'Tesla Car')

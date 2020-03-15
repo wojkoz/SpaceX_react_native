@@ -49,7 +49,9 @@ class HistoricalEvents extends Component {
         <Text>Historical events list</Text>
         <View>
           {this.state.data.map(item => (
-            <TouchableOpacity onPress={() => this.goToDetail(item)}>
+            <TouchableOpacity
+              key={item.id}
+              onPress={() => this.goToDetail(item)}>
               <Text style={{margin: 20}} key={item.id}>
                 {item.title} {item.details}
               </Text>

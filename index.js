@@ -4,6 +4,7 @@
 import {Navigation} from 'react-native-navigation';
 import App from './App';
 
+import HistoricalEvents from './screens/listItems/HistoricalEvents';
 import Launches from './screens/listItems/Launches';
 import Missions from './screens/listItems/Missions';
 import Rockets from './screens/listItems/Rockets';
@@ -17,7 +18,7 @@ import TeslaCarDetails from './screens/oneItem/TeslaCarDetails';
 import Drawer from './screens/drawer/Drawer';
 
 //list
-Navigation.registerComponent('HistoricalEvents', () => App);
+Navigation.registerComponent('HistoricalEvents', () => HistoricalEvents);
 Navigation.registerComponent('Launches', () => Launches);
 Navigation.registerComponent('Missions', () => Missions);
 Navigation.registerComponent('Rockets', () => Rockets);
@@ -50,11 +51,9 @@ Navigation.events().registerAppLaunchedListener(() => {
             children: [
               {
                 component: {
-                  id: 'Events',
                   name: 'HistoricalEvents',
                 },
                 options: {
-                  //TODO: nie pokazuje tytulu strony glownej
                   topBar: {
                     title: {
                       text: 'Historical Events',

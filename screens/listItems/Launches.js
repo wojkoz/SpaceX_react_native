@@ -50,7 +50,9 @@ class Launches extends Component {
         <Text>Launches list</Text>
         <View>
           {this.state.data.map(item => (
-            <TouchableOpacity onPress={() => this.goToDetail(item)}>
+            <TouchableOpacity
+              key={Math.random()}
+              onPress={() => this.goToDetail(item)}>
               <Text key={Math.random()}>
                 {item.mission_name} {item.flight_number}
               </Text>
