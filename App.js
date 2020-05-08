@@ -1,32 +1,14 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
+import React, {Component} from 'react';
+import {StyleSheet,View,Text,Image, Dimensions, FlatList, ListView, ImageBackground} from 'react-native';
+import DrawerButton from './components/DrawerButton';
+import HistoricalEvents from './screens/listItems/HistoricalEvents';
+import {Navigation} from 'react-native-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const App = () => {
+class App extends Component {
+  constructor(){
+    super();
+  }
   storeData = async () => {
     try {
       await AsyncStorage.setItem('@storage_Key', 'stored value');
@@ -46,93 +28,125 @@ const App = () => {
       // error reading value
     }
   };
-  storeData();
-  getData();
+  navigateToScreen = (name, title = '') => {
+    if (title === '') {
+      title = name;
+    }
 
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
+    Navigation.push('MAIN_STACK', {
+      component: {
+        name: name,
+        options: {
+          topBar: {
+            title: {
+              text: title,
+            },
+          },
+        },
+      },
+    });
+  };
+  render() {
+    return (
+      <View>
+        <View style={styles.topContainer}>
+          <Text style={styles.textFormatLogo}>Spacex</Text>
+        </View>
+        <View style={styles.bottomContainer}>
+          <View style={styles.flexContent}>
+          <DrawerButton 
+              style={styles.textFormat}
+              title="Rockets"
+              navigateTo={() => this.navigateToScreen('Rockets')}
+            />
           </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
+          <View style={styles.flexContent}>
+            <DrawerButton
+              style={styles.textFormat}
+              title="Historical Events"
+              navigateTo={() =>
+                this.navigateToScreen('HistoricalEvents', 'Historical Events')
+              }
+            />
+          </View>
+          <View style={styles.flexContent}>
+            <DrawerButton
+              style={styles.textFormat}
+              title="Launches"
+              navigateTo={() => this.navigateToScreen('Launches')}
+            />
+          </View>
+          <View style={styles.flexContent}>
+            <DrawerButton
+              style={styles.textFormat}
+              title="Missions"
+              navigateTo={() => this.navigateToScreen('Missions')}
+            />
+          </View>
+          <View style={styles.flexContent_Last}>
+            <DrawerButton
+              style={styles.textFormat}
+              title="Tesla Car"
+              navigateTo={() =>
+                this.navigateToScreen('TeslaCarDetails', 'Tesla Car')
+              }
+            />
+          </View>
+        </View>
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  drawer: {
+    padding: 12,
+    height: '100%',
+    backgroundColor: 'white',
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  textFormat: {
+    color: '#01142F',
+    fontWeight: "bold",
+    fontSize: 25,
+    marginVertical: 10,
+    color: '#01142F',
+    textAlign: "center"
   },
-  body: {
-    backgroundColor: Colors.white,
+  textFormatLogo: {
+    color: 'white',
+    fontWeight: "bold",
+    textAlign: 'center',
+    fontSize: 40,
+    letterSpacing: 11,
+    paddingLeft: 10,
+    paddingBottom: 12,
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  topContainer:{
+    padding: 45,
+    backgroundColor: '#01142F',
+    paddingBottom: 60
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
+  flexContent:{
+    width: Dimensions.get('window').width/2,
+    alignItems: 'center',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'white',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
+  flexContent_Last:{
+    width: Dimensions.get('window').width,
+    alignItems: 'center',
+    padding: 15,
+    borderWidth: 1,
+    borderColor: 'white'
   },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+  bottomContainer:{
+    paddingTop: 10,
+    height: Dimensions.get('window').height,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  }
 });
+
 
 export default App;

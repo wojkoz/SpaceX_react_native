@@ -1,9 +1,71 @@
-/**
- * @format
- */
+//!dokumentacja SpaceX APi
+//https://docs.spacexdata.com/?version=latest#9211ff07-9f81-41ac-9568-3018dd043e2a
 
-import {AppRegistry} from 'react-native';
+import {Navigation} from 'react-native-navigation';
 import App from './App';
-import {name as appName} from './app.json';
+import React from 'react-native';
 
-AppRegistry.registerComponent(appName, () => App);
+import HistoricalEvents from './screens/listItems/HistoricalEvents';
+import Launches from './screens/listItems/Launches';
+import Missions from './screens/listItems/Missions';
+import Rockets from './screens/listItems/Rockets';
+
+import HistoricalEventDetails from './screens/oneItem/HistoricalEventDetails';
+import LaunchDetails from './screens/oneItem/LaunchDetails';
+import MissionDetails from './screens/oneItem/MissionDetails';
+import RocketDetails from './screens/oneItem/RocketDetails';
+import TeslaCarDetails from './screens/oneItem/TeslaCarDetails';
+
+import Drawer from './screens/drawer/Drawer';
+import { createIconSet } from 'react-native-vector-icons';
+
+//list
+Navigation.registerComponent('HistoricalEvents', () => HistoricalEvents);
+Navigation.registerComponent('Launches', () => Launches);
+Navigation.registerComponent('Missions', () => Missions);
+Navigation.registerComponent('Rockets', () => Rockets);
+//one item details
+Navigation.registerComponent(
+  'HistoricalEventDetails',
+  () => HistoricalEventDetails,
+);
+Navigation.registerComponent('LaunchDetails', () => LaunchDetails);
+Navigation.registerComponent('MissionDetails', () => MissionDetails);
+Navigation.registerComponent('RocketDetails', () => RocketDetails);
+Navigation.registerComponent('TeslaCarDetails', () => TeslaCarDetails);
+Navigation.registerComponent('HomePage', () => App);
+Navigation.registerComponent('Drawer', () => Drawer);
+Navigation.events().registerAppLaunchedListener(() => {
+  Navigation.setRoot({
+    root: {
+      sideMenu: {
+        id: 'sideMenu',
+        left: {
+          component: {
+            id: 'drawerId',
+            name: 'Drawer',
+          },
+        },
+        center: {
+          stack: {
+            id: 'MAIN_STACK',
+            children: [
+              {
+                component: {
+                  name: 'HomePage',
+                  options: {
+                    topBar: {
+                      title: {
+                        text: 'Home Page',
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  });
+});
