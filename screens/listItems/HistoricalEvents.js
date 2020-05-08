@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Navigation} from 'react-native-navigation';
-import {Text, View, TouchableOpacity, FlatList} from 'react-native';
+import {Text, View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import {getJSONFromApi} from '../../presenter/Presenter';
 
 class HistoricalEvents extends Component {
@@ -45,25 +45,43 @@ class HistoricalEvents extends Component {
 
   render() {
     return (
-      <View>
-        <Text>Historical events list</Text>
-
+        <View>
         <FlatList
           data={this.state.data}
           renderItem={({item}) => (
-            <TouchableOpacity
-              key={item.id}
-              onPress={() => this.goToDetail(item)}>
-              <Text style={{margin: 20}} key={item.id}>
-                {item.title} {item.details}
-              </Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.cardStyle}
+                key={item.id}
+                onPress={() => this.goToDetail(item)}>
+                <Text style={styles.textStyle} key={item.id}>
+                  {item.title}
+                </Text>
+              </TouchableOpacity>
           )}
           keyExtractor={item => item.title} //? key w flatList musi byc typu string
         />
-      </View>
+        </View>
     );
   }
 }
-
+const styles = StyleSheet.create({
+  cardStyle: {
+    margin: 8,
+    padding: 8,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+  },
+  textStyle:{
+    color: '#01142F',
+    margin: 15,
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  h1:{
+    color: '#01142F',
+    fontWeight: 'bold',
+    margin: 15,
+    fontSize: 30,
+    textAlign: 'center'
+  }
+});
 export default HistoricalEvents;

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, FlatList} from 'react-native';
+import {Text, View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
 import {getJSONFromApi} from '../../presenter/Presenter';
@@ -47,14 +47,15 @@ class Launches extends Component {
   render() {
     return (
       <View>
-        <Text>Launches list</Text>
+        <Text style={styles.h1}>Launches</Text>
         <FlatList
           data={this.state.data}
           renderItem={({item}) => (
             <TouchableOpacity
+              style={styles.cardStyle}
               key={Math.random()}
               onPress={() => this.goToDetail(item)}>
-              <Text key={Math.random()}>
+              <Text key={Math.random()} style={styles.textStyle}>
                 {item.mission_name} {item.flight_number}
               </Text>
             </TouchableOpacity>
@@ -65,5 +66,25 @@ class Launches extends Component {
     );
   }
 }
-
+const styles = StyleSheet.create({
+  cardStyle: {
+    margin: 8,
+    padding: 8,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+  },
+  textStyle:{
+    color: '#01142F',
+    margin: 15,
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  h1:{
+    color: '#01142F',
+    fontWeight: 'bold',
+    margin: 15,
+    fontSize: 30,
+    textAlign: 'center'
+  }
+});
 export default Launches;

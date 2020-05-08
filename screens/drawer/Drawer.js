@@ -3,6 +3,7 @@ import {Navigation} from 'react-native-navigation';
 import {Text, View, StyleSheet} from 'react-native';
 import DrawerButton from '../../components/DrawerButton';
 
+
 class Drawer extends Component {
   constructor() {
     super();
@@ -52,17 +53,21 @@ class Drawer extends Component {
   //TODO: zablokowac mozliwosc wyboru tych samych screenow | uzyc redux?
   render() {
     return (
-      <View style={styles.main}>
+      <View style={styles.drawer}>
         <View>
-          <Text>SpaceX</Text>
+          <Text style={styles.spacex}>SpaceX</Text>
         </View>
         <View>
-          <DrawerButton
+          <DrawerButton 
+            style={styles.textFormat}
+            Icon = "rocket"
             disable={this.state.active.Rockets}
             title="Rockets"
             navigateTo={() => this.navigateToScreen('Rockets')}
           />
           <DrawerButton
+            style={styles.textFormat}
+            Icon = "history"
             disable={this.state.active.HistoricalEvents}
             title="Historical Events"
             navigateTo={() =>
@@ -70,16 +75,22 @@ class Drawer extends Component {
             }
           />
           <DrawerButton
+            style={styles.textFormat}
+            Icon = "fire"
             disable={this.state.active.Launches}
             title="Launches"
             navigateTo={() => this.navigateToScreen('Launches')}
           />
           <DrawerButton
+            style={styles.textFormat}
+            Icon = "book-open"
             disable={this.state.active.Missions}
             title="Missions"
             navigateTo={() => this.navigateToScreen('Missions')}
           />
           <DrawerButton
+            Icon="car-side"
+            style={styles.textFormat}
             disable={this.state.active.TeslaCarDetails}
             title="Tesla Car"
             navigateTo={() =>
@@ -93,12 +104,28 @@ class Drawer extends Component {
 }
 
 const styles = StyleSheet.create({
-  main: {
-    backgroundColor: 'green',
-    padding: 4,
-    paddingRight: 12,
+  drawer: {
+    padding: 12,
     height: '100%',
+    backgroundColor: 'white',
   },
+  textFormat: {
+    color: '#01142F',
+    fontWeight: "bold",
+    fontSize: 20,
+    paddingLeft: 10,
+    paddingBottom: 15,
+  },
+  spacex: {
+    color: '#01142F',
+    fontWeight: "bold",
+    fontSize: 30,
+    textAlign: 'center',
+    marginBottom: 30,
+    paddingBottom: 15,
+    borderBottomColor: '#01142F',
+    borderBottomWidth: 1,
+  }
 });
 
 export default Drawer;

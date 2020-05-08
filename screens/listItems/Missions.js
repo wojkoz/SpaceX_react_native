@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, FlatList} from 'react-native';
+import {Text, View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
 import {getJSONFromApi} from '../../presenter/Presenter';
@@ -47,14 +47,15 @@ class Missions extends Component {
   render() {
     return (
       <View>
-        <Text>Missions list</Text>
+        <Text style={styles.h1}>Missions</Text>
         <FlatList
           data={this.state.data}
           renderItem={({item}) => (
             <TouchableOpacity
+              style={styles.cardStyle}
               key={item.mission_id}
               onPress={() => this.goToDetail(item)}>
-              <Text key={item.mission_id}>{item.mission_name}</Text>
+              <Text style={styles.textStyle} key={item.mission_id}>{item.mission_name}</Text>
             </TouchableOpacity>
           )}
           keyExtractor={item => item.mission_name}
@@ -63,5 +64,25 @@ class Missions extends Component {
     );
   }
 }
-
+const styles = StyleSheet.create({
+  cardStyle: {
+    margin: 8,
+    padding: 8,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+  },
+  textStyle:{
+    color: '#01142F',
+    margin: 15,
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  h1:{
+    color: '#01142F',
+    fontWeight: 'bold',
+    margin: 15,
+    fontSize: 30,
+    textAlign: 'center'
+  }
+});
 export default Missions;

@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, FlatList} from 'react-native';
+import {Text, View, TouchableOpacity, FlatList,StyleSheet, Dimensions} from 'react-native';
 import {Navigation} from 'react-native-navigation';
-
 import {getJSONFromApi} from '../../presenter/Presenter';
-
 class Rockets extends Component {
   constructor() {
     super();
@@ -48,14 +46,17 @@ class Rockets extends Component {
   render() {
     return (
       <View>
-        <Text>Rockets list</Text>
+        <Text style={styles.h1}>Rockets</Text>
         <FlatList
+          columnWrapperStyle = {styles.row}
+          numColumns = '2'
           data={this.state.data}
           renderItem={({item}) => (
-            <TouchableOpacity
+              <TouchableOpacity
+              style={styles.cardStyle}
               key={item.rocket_id}
               onPress={() => this.goToDetail(item)}>
-              <Text key={item.rocket_id}>{item.rocket_name}</Text>
+              <Text style={styles.textStyle} key={item.rocket_id}>{item.rocket_name}</Text>
             </TouchableOpacity>
           )}
           keyExtractor={item => item.rocket_name}
@@ -64,5 +65,34 @@ class Rockets extends Component {
     );
   }
 }
-
+const styles = StyleSheet.create({
+  cardStyle: {
+    margin: 3,
+    padding: 8,
+    textAlign: 'center',
+    backgroundColor: '#ccc',
+    width: Dimensions.get('window').width/2-20,
+    borderWidth: 1,
+    borderRadius: 12,
+    marginTop: 35
+  },
+  textStyle:{
+    color: '#01142F',
+    fontWeight: 'bold',
+    margin: 15,
+    fontSize: 20,
+    backgroundColor: '#ccc',
+    textAlign: 'center',
+  },
+  row:{
+    justifyContent: 'space-around',
+  },
+  h1:{
+    color: '#01142F',
+    fontWeight: 'bold',
+    margin: 15,
+    fontSize: 30,
+    textAlign: 'center'
+  }
+});
 export default Rockets;
