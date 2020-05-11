@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  RefreshControl,
+} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
 import {getJSONFromApi} from '../../presenter/Presenter';
@@ -9,17 +16,22 @@ class Missions extends Component {
     super();
     this.state = {
       data: [{mission_id: 'id1', mission_name: 'empty'}],
+      refreshing: false,
     };
     this.observer = {};
   }
 
-  componentDidMount() {
+  setObserver = () => {
     this.observer = getJSONFromApi('missions').subscribe({
       next: item =>
         this.setState({
           data: item,
         }),
     });
+  };
+
+  componentDidMount() {
+    this.setObserver();
   }
 
   componentWillUnmount() {
@@ -44,6 +56,18 @@ class Missions extends Component {
     });
   };
 
+  myOnRefresh = () => {
+    this.setState({
+      refreshing: true,
+    });
+
+    this.setObserver();
+
+    this.setState({
+      refreshing: false,
+    });
+  };
+
   render() {
     return (
       <View>
@@ -55,10 +79,18 @@ class Missions extends Component {
               style={styles.cardStyle}
               key={item.mission_id}
               onPress={() => this.goToDetail(item)}>
-              <Text style={styles.textStyle} key={item.mission_id}>{item.mission_name}</Text>
+              <Text style={styles.textStyle} key={item.mission_id}>
+                {item.mission_name}
+              </Text>
             </TouchableOpacity>
           )}
           keyExtractor={item => item.mission_name}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.myOnRefresh}
+            />
+          }
         />
       </View>
     );
@@ -71,18 +103,18 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     borderBottomWidth: 1,
   },
-  textStyle:{
+  textStyle: {
     color: '#01142F',
     margin: 15,
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
-  h1:{
+  h1: {
     color: '#01142F',
     fontWeight: 'bold',
     margin: 15,
     fontSize: 30,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 export default Missions;
