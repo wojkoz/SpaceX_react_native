@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet,View,Text,Image, Dimensions, FlatList, ListView, ImageBackground} from 'react-native';
+import {StyleSheet, View, Text, Dimensions} from 'react-native';
 import DrawerButton from './components/DrawerButton';
-import HistoricalEvents from './screens/listItems/HistoricalEvents';
 import {Navigation} from 'react-native-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
 
 class App extends Component {
-  constructor(){
+  constructor() {
     super();
   }
   storeData = async () => {
@@ -54,7 +53,7 @@ class App extends Component {
         </View>
         <View style={styles.bottomContainer}>
           <View style={styles.flexContent}>
-          <DrawerButton 
+            <DrawerButton
               style={styles.textFormat}
               title="Rockets"
               navigateTo={() => this.navigateToScreen('Rockets')}
@@ -96,7 +95,7 @@ class App extends Component {
       </View>
     );
   }
-};
+}
 
 const styles = StyleSheet.create({
   drawer: {
@@ -106,47 +105,46 @@ const styles = StyleSheet.create({
   },
   textFormat: {
     color: '#01142F',
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 25,
     marginVertical: 10,
     color: '#01142F',
-    textAlign: "center"
+    textAlign: 'center',
   },
   textFormatLogo: {
     color: 'white',
-    fontWeight: "bold",
+    fontWeight: 'bold',
     textAlign: 'center',
     fontSize: 40,
     letterSpacing: 11,
     paddingLeft: 10,
     paddingBottom: 12,
   },
-  topContainer:{
+  topContainer: {
     padding: 45,
     backgroundColor: '#01142F',
-    paddingBottom: 60
+    paddingBottom: 60,
   },
-  flexContent:{
-    width: Dimensions.get('window').width/2,
+  flexContent: {
+    width: Dimensions.get('window').width / 2,
     alignItems: 'center',
     padding: 10,
     borderWidth: 1,
     borderColor: 'white',
   },
-  flexContent_Last:{
+  flexContent_Last: {
     width: Dimensions.get('window').width,
     alignItems: 'center',
     padding: 15,
     borderWidth: 1,
-    borderColor: 'white'
+    borderColor: 'white',
   },
-  bottomContainer:{
+  bottomContainer: {
     paddingTop: 10,
     height: Dimensions.get('window').height,
     flexDirection: 'row',
     flexWrap: 'wrap',
-  }
+  },
 });
-
 
 export default App;

@@ -3,7 +3,6 @@
 
 import {Navigation} from 'react-native-navigation';
 import App from './App';
-import React from 'react-native';
 
 import HistoricalEvents from './screens/listItems/HistoricalEvents';
 import Launches from './screens/listItems/Launches';
@@ -17,7 +16,6 @@ import RocketDetails from './screens/oneItem/RocketDetails';
 import TeslaCarDetails from './screens/oneItem/TeslaCarDetails';
 
 import Drawer from './screens/drawer/Drawer';
-import { createIconSet } from 'react-native-vector-icons';
 
 //list
 Navigation.registerComponent('HistoricalEvents', () => HistoricalEvents);
@@ -36,6 +34,30 @@ Navigation.registerComponent('TeslaCarDetails', () => TeslaCarDetails);
 Navigation.registerComponent('HomePage', () => App);
 Navigation.registerComponent('Drawer', () => Drawer);
 Navigation.events().registerAppLaunchedListener(() => {
+  Navigation.setDefaultOptions({
+    topBar: {
+      elevation: 0,
+      visible: true,
+      drawBehind: true,
+      animate: false,
+      borderHeight: 1,
+      leftButtons: [
+        {
+          icon: require('./assets/img/Hamburger_icon.png'),
+          id: 'drawerButton',
+        },
+      ],
+      title: {
+        color: 'white',
+        alignment: 'center',
+        text: 'Home',
+      },
+      background: {
+        color: 'gray',
+      },
+    },
+  });
+
   Navigation.setRoot({
     root: {
       sideMenu: {
@@ -67,5 +89,15 @@ Navigation.events().registerAppLaunchedListener(() => {
         },
       },
     },
+  });
+
+  Navigation.events().registerNavigationButtonPressedListener(() => {
+    Navigation.mergeOptions('drawerId', {
+      sideMenu: {
+        left: {
+          visible: true,
+        },
+      },
+    });
   });
 });
