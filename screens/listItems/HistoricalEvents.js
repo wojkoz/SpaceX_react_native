@@ -1,6 +1,13 @@
 import React, {Component} from 'react';
 import {Navigation} from 'react-native-navigation';
-import {Text, View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  RefreshControl,
+} from 'react-native';
 import {getJSONFromApi} from '../../presenter/Presenter';
 
 class HistoricalEvents extends Component {
@@ -8,17 +15,22 @@ class HistoricalEvents extends Component {
     super();
     this.state = {
       data: [{id: 0, title: 'pusty', details: 'brak opisu'}],
+      refreshing: false,
     };
     this.observer = {};
   }
 
-  componentDidMount() {
+  setObserver = () => {
     this.observer = getJSONFromApi('history').subscribe({
       next: item =>
         this.setState({
           data: item,
         }),
     });
+  };
+
+  componentDidMount() {
+    this.setObserver();
   }
 
   componentWillUnmount() {
@@ -43,23 +55,42 @@ class HistoricalEvents extends Component {
     });
   };
 
+  myOnRefresh = () => {
+    this.setState({
+      refreshing: true,
+    });
+
+    this.setObserver();
+
+    this.setState({
+      refreshing: false,
+    });
+  };
+
   render() {
     return (
-        <View>
+      <View>
         <FlatList
           data={this.state.data}
           renderItem={({item}) => (
-              <TouchableOpacity style={styles.cardStyle}
-                key={item.id}
-                onPress={() => this.goToDetail(item)}>
-                <Text style={styles.textStyle} key={item.id}>
-                  {item.title}
-                </Text>
-              </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cardStyle}
+              key={item.id}
+              onPress={() => this.goToDetail(item)}>
+              <Text style={styles.textStyle} key={item.id}>
+                {item.title}
+              </Text>
+            </TouchableOpacity>
           )}
-          keyExtractor={item => item.title} //? key w flatList musi byc typu string
+          keyExtractor={item => item.title}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.myOnRefresh}
+            />
+          }
         />
-        </View>
+      </View>
     );
   }
 }
@@ -70,18 +101,18 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     borderBottomWidth: 1,
   },
-  textStyle:{
+  textStyle: {
     color: '#01142F',
     margin: 15,
     fontSize: 18,
     fontWeight: 'bold',
   },
-  h1:{
+  h1: {
     color: '#01142F',
     fontWeight: 'bold',
     margin: 15,
     fontSize: 30,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 export default HistoricalEvents;

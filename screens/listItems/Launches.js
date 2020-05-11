@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  RefreshControl,
+} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
 import {getJSONFromApi} from '../../presenter/Presenter';
@@ -9,17 +16,22 @@ class Launches extends Component {
     super();
     this.state = {
       data: [{flight_id: -11, mission_name: 'empty', flight_number: -1}],
+      refreshing: false,
     };
     this.observer = {};
   }
 
-  componentDidMount() {
+  setObserver = () => {
     this.observer = getJSONFromApi('launches').subscribe({
       next: item =>
         this.setState({
           data: item,
         }),
     });
+  };
+
+  componentDidMount() {
+    this.setObserver();
   }
 
   componentWillUnmount() {
@@ -44,6 +56,18 @@ class Launches extends Component {
     });
   };
 
+  myOnRefresh = () => {
+    this.setState({
+      refreshing: true,
+    });
+
+    this.setObserver();
+
+    this.setState({
+      refreshing: false,
+    });
+  };
+
   render() {
     return (
       <View>
@@ -61,6 +85,12 @@ class Launches extends Component {
             </TouchableOpacity>
           )}
           keyExtractor={item => item.mission_name}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.myOnRefresh}
+            />
+          }
         />
       </View>
     );
@@ -73,18 +103,18 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     borderBottomWidth: 1,
   },
-  textStyle:{
+  textStyle: {
     color: '#01142F',
     margin: 15,
     fontSize: 18,
     fontWeight: 'bold',
   },
-  h1:{
+  h1: {
     color: '#01142F',
     fontWeight: 'bold',
     margin: 15,
     fontSize: 30,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 export default Launches;

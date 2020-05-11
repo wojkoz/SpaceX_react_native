@@ -1,5 +1,13 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, FlatList,StyleSheet, Dimensions} from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  Dimensions,
+  RefreshControl,
+} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {getJSONFromApi} from '../../presenter/Presenter';
 class Rockets extends Component {
@@ -8,17 +16,22 @@ class Rockets extends Component {
 
     this.state = {
       data: [{rocket_id: 'empty', rocket_name: 'empty'}],
+      refreshing: false,
     };
     this.observer = {};
   }
 
-  componentDidMount() {
+  setObserver = () => {
     this.observer = getJSONFromApi('rockets').subscribe({
       next: item =>
         this.setState({
           data: item,
         }),
     });
+  };
+
+  componentDidMount() {
+    this.setObserver();
   }
 
   componentWillUnmount() {
@@ -43,23 +56,43 @@ class Rockets extends Component {
     });
   };
 
+  myOnRefresh = () => {
+    this.setState({
+      refreshing: true,
+    });
+
+    this.setObserver();
+
+    this.setState({
+      refreshing: false,
+    });
+  };
+
   render() {
     return (
       <View>
         <Text style={styles.h1}>Rockets</Text>
         <FlatList
-          columnWrapperStyle = {styles.row}
-          numColumns = '2'
+          columnWrapperStyle={styles.row}
+          numColumns="2"
           data={this.state.data}
           renderItem={({item}) => (
-              <TouchableOpacity
+            <TouchableOpacity
               style={styles.cardStyle}
               key={item.rocket_id}
               onPress={() => this.goToDetail(item)}>
-              <Text style={styles.textStyle} key={item.rocket_id}>{item.rocket_name}</Text>
+              <Text style={styles.textStyle} key={item.rocket_id}>
+                {item.rocket_name}
+              </Text>
             </TouchableOpacity>
           )}
           keyExtractor={item => item.rocket_name}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.myOnRefresh}
+            />
+          }
         />
       </View>
     );
@@ -71,12 +104,12 @@ const styles = StyleSheet.create({
     padding: 8,
     textAlign: 'center',
     backgroundColor: '#ccc',
-    width: Dimensions.get('window').width/2-20,
+    width: Dimensions.get('window').width / 2 - 20,
     borderWidth: 1,
     borderRadius: 12,
-    marginTop: 35
+    marginTop: 35,
   },
-  textStyle:{
+  textStyle: {
     color: '#01142F',
     fontWeight: 'bold',
     margin: 15,
@@ -84,15 +117,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
     textAlign: 'center',
   },
-  row:{
+  row: {
     justifyContent: 'space-around',
   },
-  h1:{
+  h1: {
     color: '#01142F',
     fontWeight: 'bold',
     margin: 15,
     fontSize: 30,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 export default Rockets;
