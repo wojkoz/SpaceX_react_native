@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, ScrollView, RefreshControl, StyleSheet} from 'react-native';
 
 import {getJSONFromApi} from '../../presenter/Presenter';
 import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
@@ -10,6 +10,7 @@ class TeslaCarDetails extends Component {
     this.state = {
       data: {name: 'empty'},
       isConnected: false,
+      refreshing: false,
     };
 
     this.observer = 0;
@@ -45,16 +46,42 @@ class TeslaCarDetails extends Component {
     }
   }
 
+  onMyRefresh = () => {
+    this.setState({
+      refreshing: true,
+    });
+
+    this.checkConnectionAndFetch();
+
+    this.setState({
+      refreshing: false,
+    });
+  };
+
   render() {
     return (
-      <View>
-        <Text>Roadster info</Text>
-        <View>
-          <Text style={{marginTop: 40}}>{this.state.data.name}</Text>
-        </View>
+      <View style={styles.main}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.onMyRefresh}
+            />
+          }>
+          <Text>Roadster info</Text>
+          <View>
+            <Text style={{marginTop: 40}}>{this.state.data.name}</Text>
+          </View>
+        </ScrollView>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  main: {
+    marginTop: 30,
+  },
+});
 
 export default TeslaCarDetails;

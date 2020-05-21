@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, ScrollView, RefreshControl, StyleSheet} from 'react-native';
 
 import {getJSONFromApi} from '../../presenter/Presenter';
 import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
@@ -10,6 +10,7 @@ class HistoricalEventDetails extends Component {
     this.state = {
       data: {id: -1, title: 'empty', details: 'empty'},
       isConnected: false,
+      refreshing: false,
     };
 
     this.observer = 0;
@@ -49,16 +50,42 @@ class HistoricalEventDetails extends Component {
     }
   }
 
+  onMyRefresh = () => {
+    this.setState({
+      refreshing: true,
+    });
+
+    this.checkConnectionAndFetch();
+
+    this.setState({
+      refreshing: false,
+    });
+  };
+
   render() {
     return (
-      <View>
-        <Text>Historical Event info</Text>
-        <View>
-          <Text>Title: {this.state.data.title}</Text>
-        </View>
+      <View style={styles.main}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.onMyRefresh}
+            />
+          }>
+          <Text>Historical Event info</Text>
+          <View>
+            <Text>Title: {this.state.data.title}</Text>
+          </View>
+        </ScrollView>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  main: {
+    marginTop: 30,
+  },
+});
 
 export default HistoricalEventDetails;
