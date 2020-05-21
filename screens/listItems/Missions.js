@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
+import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
 import {getJSONFromApi} from '../../presenter/Presenter';
 
 class Missions extends Component {
@@ -17,11 +18,23 @@ class Missions extends Component {
     this.state = {
       data: [{mission_id: 'id1', mission_name: 'empty'}],
       refreshing: false,
+      isConnected: false,
     };
-    this.observer = {};
+    this.observer = 0;
   }
 
-  setObserver = () => {
+  checkConnectionAndFetch() {
+    checkNetworkConnection().then(value => {
+      this.setState({
+        isConnected: value,
+      });
+      if (this.state.isConnected) {
+        this.setDataObserver();
+      }
+    });
+  }
+
+  setDataObserver = () => {
     this.observer = getJSONFromApi('missions').subscribe({
       next: item =>
         this.setState({
@@ -31,11 +44,13 @@ class Missions extends Component {
   };
 
   componentDidMount() {
-    this.setObserver();
+    this.checkConnectionAndFetch();
   }
 
   componentWillUnmount() {
-    this.observer.unsubscribe();
+    if (this.observer !== 0) {
+      this.observer.unsubscribe();
+    }
   }
 
   goToDetail = item => {
@@ -61,7 +76,7 @@ class Missions extends Component {
       refreshing: true,
     });
 
-    this.setObserver();
+    this.checkConnectionAndFetch();
 
     this.setState({
       refreshing: false,

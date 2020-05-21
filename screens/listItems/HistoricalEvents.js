@@ -9,6 +9,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import {getJSONFromApi} from '../../presenter/Presenter';
+import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
 
 class HistoricalEvents extends Component {
   constructor() {
@@ -16,11 +17,12 @@ class HistoricalEvents extends Component {
     this.state = {
       data: [{id: 0, title: 'pusty', details: 'brak opisu'}],
       refreshing: false,
+      isConnected: false,
     };
-    this.observer = {};
+    this.observer = 0;
   }
 
-  setObserver = () => {
+  setDataObserver = () => {
     this.observer = getJSONFromApi('history').subscribe({
       next: item =>
         this.setState({
@@ -30,11 +32,13 @@ class HistoricalEvents extends Component {
   };
 
   componentDidMount() {
-    this.setObserver();
+    this.checkConnectionAndFetch();
   }
 
   componentWillUnmount() {
-    this.observer.unsubscribe();
+    if (this.observer !== 0) {
+      this.observer.unsubscribe();
+    }
   }
 
   goToDetail = item => {
@@ -60,12 +64,23 @@ class HistoricalEvents extends Component {
       refreshing: true,
     });
 
-    this.setObserver();
+    this.checkConnectionAndFetch();
 
     this.setState({
       refreshing: false,
     });
   };
+
+  checkConnectionAndFetch() {
+    checkNetworkConnection().then(value => {
+      this.setState({
+        isConnected: value,
+      });
+      if (this.state.isConnected) {
+        this.setDataObserver();
+      }
+    });
+  }
 
   render() {
     return (

@@ -9,6 +9,8 @@ import {
   RefreshControl,
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
+
+import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
 import {getJSONFromApi} from '../../presenter/Presenter';
 class Rockets extends Component {
   constructor() {
@@ -17,11 +19,23 @@ class Rockets extends Component {
     this.state = {
       data: [{rocket_id: 'empty', rocket_name: 'empty'}],
       refreshing: false,
+      isConnected: false,
     };
-    this.observer = {};
+    this.observer = 0;
   }
 
-  setObserver = () => {
+  checkConnectionAndFetch() {
+    checkNetworkConnection().then(value => {
+      this.setState({
+        isConnected: value,
+      });
+      if (this.state.isConnected) {
+        this.setDataObserver();
+      }
+    });
+  }
+
+  setDataObserver = () => {
     this.observer = getJSONFromApi('rockets').subscribe({
       next: item =>
         this.setState({
@@ -31,11 +45,13 @@ class Rockets extends Component {
   };
 
   componentDidMount() {
-    this.setObserver();
+    this.checkConnectionAndFetch();
   }
 
   componentWillUnmount() {
-    this.observer.unsubscribe();
+    if (this.observer !== 0) {
+      this.observer.unsubscribe();
+    }
   }
 
   goToDetail = item => {
@@ -61,7 +77,7 @@ class Rockets extends Component {
       refreshing: true,
     });
 
-    this.setObserver();
+    this.checkConnectionAndFetch();
 
     this.setState({
       refreshing: false,

@@ -41,12 +41,7 @@ Navigation.events().registerAppLaunchedListener(() => {
       drawBehind: true,
       animate: false,
       borderHeight: 1,
-      leftButtons: [
-        {
-          icon: require('./assets/img/Hamburger_icon.png'),
-          id: 'drawerButton',
-        },
-      ],
+      leftButtons: [],
       title: {
         color: 'white',
         alignment: 'center',
