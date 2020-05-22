@@ -12,6 +12,7 @@ import {Navigation} from 'react-native-navigation';
 
 import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
 import {getJSONFromApi} from '../../presenter/Presenter';
+import {loadData, saveData, keys} from '../../utils/Storage';
 class Rockets extends Component {
   constructor() {
     super();
@@ -31,16 +32,24 @@ class Rockets extends Component {
       });
       if (this.state.isConnected) {
         this.setDataObserver();
+      } else {
+        loadData(keys.list.rockets).then(value => {
+          this.setState({
+            data: value,
+          });
+        });
       }
     });
   }
 
   setDataObserver = () => {
     this.observer = getJSONFromApi('rockets').subscribe({
-      next: item =>
+      next: item => {
         this.setState({
           data: item,
         }),
+          saveData(keys.list.rockets, this.state.data).then();
+      },
     });
   };
 
@@ -59,7 +68,7 @@ class Rockets extends Component {
       component: {
         name: 'RocketDetails',
         passProps: {
-          url: 'rockets/' + item.rocket_id,
+          data: item,
         },
         options: {
           topBar: {

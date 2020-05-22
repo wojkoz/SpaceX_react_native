@@ -11,6 +11,7 @@ import {Navigation} from 'react-native-navigation';
 
 import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
 import {getJSONFromApi} from '../../presenter/Presenter';
+import {loadData, saveData, keys} from '../../utils/Storage';
 
 class Launches extends Component {
   constructor() {
@@ -30,16 +31,24 @@ class Launches extends Component {
       });
       if (this.state.isConnected) {
         this.setDataObserver();
+      } else {
+        loadData(keys.list.rockets).then(value => {
+          this.setState({
+            data: value,
+          });
+        });
       }
     });
   }
 
   setDataObserver = () => {
     this.observer = getJSONFromApi('launches').subscribe({
-      next: item =>
+      next: item => {
         this.setState({
           data: item,
         }),
+          saveData(keys.list.launches, this.state.data).then();
+      },
     });
   };
 
@@ -58,7 +67,7 @@ class Launches extends Component {
       component: {
         name: 'LaunchDetails',
         passProps: {
-          url: 'launches/' + item.flight_number,
+          data: item,
         },
         options: {
           topBar: {

@@ -11,6 +11,7 @@ import {Navigation} from 'react-native-navigation';
 
 import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
 import {getJSONFromApi} from '../../presenter/Presenter';
+import {loadData, saveData, keys} from '../../utils/Storage';
 
 class Missions extends Component {
   constructor() {
@@ -30,16 +31,24 @@ class Missions extends Component {
       });
       if (this.state.isConnected) {
         this.setDataObserver();
+      } else {
+        loadData(keys.list.rockets).then(value => {
+          this.setState({
+            data: value,
+          });
+        });
       }
     });
   }
 
   setDataObserver = () => {
     this.observer = getJSONFromApi('missions').subscribe({
-      next: item =>
+      next: item => {
         this.setState({
           data: item,
         }),
+          saveData(keys.list.missions, this.state.data).then();
+      },
     });
   };
 
@@ -58,7 +67,7 @@ class Missions extends Component {
       component: {
         name: 'MissionDetails',
         passProps: {
-          url: 'missions/' + item.mission_id,
+          data: item,
         },
         options: {
           topBar: {

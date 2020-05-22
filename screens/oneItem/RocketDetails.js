@@ -1,90 +1,21 @@
-import React, {Component} from 'react';
-import {Text, View, ScrollView, RefreshControl, StyleSheet} from 'react-native';
+import React from 'react';
+import {Text, View, StyleSheet} from 'react-native';
 
-import {getJSONFromApi} from '../../presenter/Presenter';
-import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
-
-class RocketDetails extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: {rocket_id: -1, rocket_name: 'empty'},
-      isConnected: false,
-      refreshing: false,
-    };
-
-    this.observer = 0;
-  }
-
-  checkConnectionAndFetch() {
-    checkNetworkConnection().then(value => {
-      this.setState({
-        isConnected: value,
-      });
-      if (this.state.isConnected) {
-        this.setDataObserver();
-      }
-    });
-  }
-
-  componentDidMount() {
-    this.checkConnectionAndFetch();
-  }
-
-  componentDidMount() {
-    this.checkConnectionAndFetch();
-  }
-
-  setDataObserver() {
-    this.observer = getJSONFromApi(this.props.url).subscribe({
-      next: item =>
-        this.setState({
-          data: item,
-        }),
-    });
-  }
-
-  componentWillUnmount() {
-    if (this.observer !== 0) {
-      this.observer.unsubscribe();
-    }
-  }
-
-  onMyRefresh = () => {
-    this.setState({
-      refreshing: true,
-    });
-
-    this.checkConnectionAndFetch();
-
-    this.setState({
-      refreshing: false,
-    });
-  };
-
-  render() {
-    return (
-      <View style={styles.main}>
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this.onMyRefresh}
-            />
-          }>
-          <Text>Rocket info</Text>
-          <View>
-            <Text>{this.state.data.rocket_name}</Text>
-          </View>
-        </ScrollView>
+const RocketDetails = props => {
+  return (
+    <View style={styles.main}>
+      <Text>Rocket info</Text>
+      <View>
+        <Text>{props.data.rocket_name}</Text>
+        <Text>{props.data.id}</Text>
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   main: {
-    marginTop: 30,
+    marginTop: 50,
   },
 });
 

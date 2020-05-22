@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {getJSONFromApi} from '../../presenter/Presenter';
 import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
+import {loadData, saveData, keys} from '../../utils/Storage';
 
 class HistoricalEvents extends Component {
   constructor() {
@@ -24,10 +25,12 @@ class HistoricalEvents extends Component {
 
   setDataObserver = () => {
     this.observer = getJSONFromApi('history').subscribe({
-      next: item =>
+      next: item => {
         this.setState({
           data: item,
         }),
+          saveData(keys.list.events, this.state.data).then();
+      },
     });
   };
 
@@ -46,7 +49,7 @@ class HistoricalEvents extends Component {
       component: {
         name: 'HistoricalEventDetails',
         passProps: {
-          url: 'history/' + item.id,
+          data: item,
         },
         options: {
           topBar: {
@@ -78,6 +81,12 @@ class HistoricalEvents extends Component {
       });
       if (this.state.isConnected) {
         this.setDataObserver();
+      } else {
+        loadData(keys.list.rockets).then(value => {
+          this.setState({
+            data: value,
+          });
+        });
       }
     });
   }
@@ -90,7 +99,7 @@ class HistoricalEvents extends Component {
           renderItem={({item}) => (
             <TouchableOpacity
               style={styles.cardStyle}
-              key={item.id}
+              key={item.id + Math.random()}
               onPress={() => this.goToDetail(item)}>
               <Text style={styles.textStyle} key={item.id}>
                 {item.title}
