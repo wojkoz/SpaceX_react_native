@@ -10,6 +10,7 @@ import {
 
 import {getJSONFromApi} from '../../presenter/Presenter';
 import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
+import {loadData, saveData, keys} from '../../utils/Storage';
 
 class TeslaCarDetails extends Component {
   constructor() {
@@ -30,6 +31,12 @@ class TeslaCarDetails extends Component {
       });
       if (this.state.isConnected) {
         this.setDataObserver();
+      } else {
+        loadData(keys.list.roadster).then(value => {
+          this.setState({
+            data: value,
+          });
+        });
       }
     });
   }
@@ -45,6 +52,7 @@ class TeslaCarDetails extends Component {
           data: item,
         }),
     });
+    saveData(keys.list.roadster, this.state.data).then();
   }
 
   componentWillUnmount() {

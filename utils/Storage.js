@@ -24,5 +24,6 @@ export const keys = {
     missions: 'MISSIONS_KEY',
     launches: 'LAUNCHES_KEY',
     events: 'EVENTS_KEY',
+    roadster: 'ROADESTER_KEY',
   },
 };
