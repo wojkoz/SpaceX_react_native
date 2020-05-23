@@ -1,12 +1,12 @@
 import React from 'react';
 import {Text, View, StyleSheet, ScrollView, Linking} from 'react-native';
-
+import Player from '../../components/Player';
 const LaunchDetails = props => {
   return (
     <ScrollView>
       <View style={styles.main}>
         <View>
-          <Text>Flight numbe: {props.data.flight_number}</Text>
+          <Text>Flight number: {props.data.flight_number}</Text>
           <Text>Launch year: {props.data.launch_year}</Text>
           <Text>Used rocket: {props.data.rocket.rocket_name}</Text>
           <Text>{props.data.details}</Text>
@@ -26,6 +26,9 @@ const LaunchDetails = props => {
               Reddit
             </Text>
           </View>
+          <View>
+            <Player videoID={props.data.links.youtube_id} />
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -34,7 +37,7 @@ const LaunchDetails = props => {
 
 const styles = StyleSheet.create({
   main: {
-    marginTop: 30,
+    marginTop: 50,
   },
 });
 
