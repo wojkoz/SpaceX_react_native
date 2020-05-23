@@ -14,7 +14,7 @@ const MissionDetails = props => {
 
 const styles = StyleSheet.create({
   main: {
-    marginTop: 30,
+    marginTop: 50,
   },
 });
 

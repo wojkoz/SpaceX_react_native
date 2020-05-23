@@ -32,7 +32,7 @@ class Launches extends Component {
       if (this.state.isConnected) {
         this.setDataObserver();
       } else {
-        loadData(keys.list.rockets).then(value => {
+        loadData(keys.list.launches).then(value => {
           this.setState({
             data: value,
           });
