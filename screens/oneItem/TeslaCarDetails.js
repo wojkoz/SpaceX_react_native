@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {Text, View, ScrollView, RefreshControl, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  ScrollView,
+  RefreshControl,
+  StyleSheet,
+  Linking,
+} from 'react-native';
 
 import {getJSONFromApi} from '../../presenter/Presenter';
 import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
@@ -68,9 +75,29 @@ class TeslaCarDetails extends Component {
               onRefresh={this.onMyRefresh}
             />
           }>
-          <Text>Roadster info</Text>
           <View>
             <Text style={{marginTop: 40}}>{this.state.data.name}</Text>
+            <Text>{this.state.data.details}</Text>
+          </View>
+          <View>
+            <Text>Launch date: {this.state.data.launch_date_utc}</Text>
+            <Text>Launch mass: {this.state.data.launch_mass_kg}kg</Text>
+            <Text>Orbit type: {this.state.data.orbit_type}</Text>
+            <Text>Speed: {this.state.data.speed_kph}km/h</Text>
+            <Text>
+              Distance from earth: {this.state.data.earth_distance_km}km
+            </Text>
+            <Text>
+              Distance from Mars: {this.state.data.mars_distance_km}km
+            </Text>
+          </View>
+          <View>
+            <Text>Links</Text>
+            <View>
+              <Text onPress={() => Linking.openURL(this.state.data.wikipedia)}>
+                Wikipedia
+              </Text>
+            </View>
           </View>
         </ScrollView>
       </View>
