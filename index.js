@@ -42,6 +42,7 @@ Navigation.events().registerAppLaunchedListener(() => {
       animate: false,
       borderHeight: 1,
       leftButtons: [],
+
       title: {
         color: 'white',
         alignment: 'center',
