@@ -34,26 +34,6 @@ Navigation.registerComponent('TeslaCarDetails', () => TeslaCarDetails);
 Navigation.registerComponent('HomePage', () => App);
 Navigation.registerComponent('Drawer', () => Drawer);
 Navigation.events().registerAppLaunchedListener(() => {
-  Navigation.setDefaultOptions({
-    topBar: {
-      elevation: 0,
-      visible: true,
-      drawBehind: true,
-      animate: false,
-      borderHeight: 1,
-      leftButtons: [],
-
-      title: {
-        color: 'white',
-        alignment: 'center',
-        text: 'Home',
-      },
-      background: {
-        color: 'gray',
-      },
-    },
-  });
-
   Navigation.setRoot({
     root: {
       sideMenu: {
@@ -70,14 +50,7 @@ Navigation.events().registerAppLaunchedListener(() => {
             children: [
               {
                 component: {
-                  name: 'HomePage',
-                  options: {
-                    topBar: {
-                      title: {
-                        text: 'Home Page',
-                      },
-                    },
-                  },
+                  name: 'HomePage'
                 },
               },
             ],
