@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Dimensions} from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 
 const Player = props => {
@@ -8,15 +8,15 @@ const Player = props => {
   if (props.videoID === undefined || props.videoID === null) {
     return (
       <View>
-        <Text>There is no Youtube link!</Text>
+        <Text style={styles.textNoPlayer}>There is no Youtube link!</Text>
       </View>
     );
   } else {
     return (
       <YoutubePlayer
         ref={playerRef}
-        height={300}
-        width={400}
+        height={230}
+        width={Dimensions.get('window').width}
         videoId={props.videoID}
         play={playing}
         onChangeState={event => console.log(event)}
@@ -34,4 +34,13 @@ const Player = props => {
   }
 };
 
+const styles = StyleSheet.create({
+  textNoPlayer: {
+    textAlign: 'center',
+    fontSize: 28,
+    color: '#900',
+    fontWeight: 'bold',
+    marginVertical: 10,
+  }
+})
 export default Player;

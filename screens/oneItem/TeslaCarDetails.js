@@ -6,6 +6,7 @@ import {
   RefreshControl,
   StyleSheet,
   Linking,
+  Dimensions,
 } from 'react-native';
 
 import {getJSONFromApi} from '../../presenter/Presenter';
@@ -75,7 +76,7 @@ class TeslaCarDetails extends Component {
 
   render() {
     return (
-      <View style={styles.main}>
+      <View>
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -84,25 +85,60 @@ class TeslaCarDetails extends Component {
             />
           }>
           <View>
-            <Text style={{marginTop: 40}}>{this.state.data.name}</Text>
-            <Text>{this.state.data.details}</Text>
+            <Text style={styles.title}>{this.state.data.name}</Text>
+            <Text style={styles.description}>{this.state.data.details}</Text>
           </View>
           <View>
-            <Text>Launch date: {this.state.data.launch_date_utc}</Text>
-            <Text>Launch mass: {this.state.data.launch_mass_kg}kg</Text>
-            <Text>Orbit type: {this.state.data.orbit_type}</Text>
-            <Text>Speed: {this.state.data.speed_kph}km/h</Text>
-            <Text>
-              Distance from earth: {this.state.data.earth_distance_km}km
-            </Text>
-            <Text>
-              Distance from Mars: {this.state.data.mars_distance_km}km
-            </Text>
+          <View style={styles.infoContainer}>
+            <View style={styles.flexProps}>
+              <Text style={styles.props}>Launch date</Text>
+            </View>
+            <View style={styles.flexProps}>
+              <Text style={styles.props}>Launch mass</Text>
+            </View>
           </View>
-          <View>
-            <Text>Links</Text>
+          <View style={styles.infoContainer}>
+            <View style={styles.flexValues}>
+              <Text style={styles.values}>{this.state.data.launch_date_utc}</Text>
+            </View>
+            <View style={styles.flexValues}>
+              <Text style={styles.values}>{this.state.data.launch_mass_kg}kg</Text>
+            </View>
+          </View>
+          <View style={styles.infoContainer}>
+            <View style={styles.flexProps}>
+              <Text style={styles.props}>Orbit type</Text>
+            </View>
+            <View style={styles.flexProps}>
+              <Text style={styles.props}>Speed</Text>
+            </View>
+          </View>
+          <View style={styles.infoContainer}>
+            <View style={styles.flexValues}>
+              <Text style={styles.values}>{this.state.data.orbit_type}</Text>
+            </View>
+            <View style={styles.flexValues}>
+              <Text style={styles.values}>{this.state.data.speed_kph}km/h</Text>
+            </View>
+          </View>
+          <View style={styles.infoContainer}>
+            <View style={styles.flexProps}>
+              <Text style={styles.props}>Distance from earth</Text>
+            </View>
+            <View style={styles.flexProps}>
+              <Text style={styles.props}>Distance from Mars</Text>
+            </View>
+          </View>
+          <View style={styles.infoContainer}>
+            <View style={styles.flexValues}>
+              <Text style={styles.values}>{this.state.data.earth_distance_km}km</Text>
+            </View>
+            <View style={styles.flexValues}>
+              <Text style={styles.values}>{this.state.data.mars_distance_km}km</Text>
+            </View>
+          </View>
             <View>
-              <Text onPress={() => Linking.openURL(this.state.data.wikipedia)}>
+              <Text onPress={() => Linking.openURL(this.state.data.wikipedia)} style={styles.wikipedia}>
                 Wikipedia
               </Text>
             </View>
@@ -114,9 +150,67 @@ class TeslaCarDetails extends Component {
 }
 
 const styles = StyleSheet.create({
-  main: {
-    marginTop: 30,
+  title: {
+    textAlign: 'center',
+    fontSize: 28,
+    color: '#01142F',
+    fontFamily: 'Christopher-Done',
+    marginVertical: 30
   },
+  description:{
+    marginHorizontal: 10,
+    fontSize: 18,
+    color: '#01142F',
+    fontWeight: 'bold',
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 12,
+    backgroundColor: 'rgb(210,210,210)',
+    marginBottom: 15
+  },
+  infoContainer: {
+    paddingTop: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  flexProps: {
+    width: Dimensions.get('window').width /2-10,
+    alignItems: 'center',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 12,
+    backgroundColor: '#01142F',
+    marginHorizontal: 5
+  },
+  flexValues: {
+    width: Dimensions.get('window').width /2-10,
+    alignItems: 'center',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 12,
+    backgroundColor: 'rgb(210,210,210)',
+    marginHorizontal: 5
+  },
+  props: {
+    color: 'white',
+    fontFamily: 'Christopher-Done',
+  },
+  values: {
+    color: '#01142F',
+    fontWeight: 'bold'
+  },
+  wikipedia: {
+    color: 'white',
+    fontFamily: 'Christopher-Done',
+    fontSize: 25,
+    marginTop: 10,
+    textAlign: 'center',
+    borderWidth: 1,
+    paddingVertical: 15,
+    backgroundColor: '#01142F'
+  }
 });
 
 export default TeslaCarDetails;

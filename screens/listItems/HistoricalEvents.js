@@ -94,6 +94,7 @@ class HistoricalEvents extends Component {
   render() {
     return (
       <View>
+        <Text style={styles.h1}>Historical Events</Text>
         <FlatList
           data={this.state.data}
           renderItem={({item}) => (
@@ -129,11 +130,11 @@ const styles = StyleSheet.create({
     color: '#01142F',
     margin: 15,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'LuckiestGuy-Regular',
   },
   h1: {
     color: '#01142F',
-    fontWeight: 'bold',
+    fontFamily: 'LuckiestGuy-Regular',
     margin: 15,
     fontSize: 30,
     textAlign: 'center',

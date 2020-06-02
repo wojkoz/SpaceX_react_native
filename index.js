@@ -34,6 +34,14 @@ Navigation.registerComponent('TeslaCarDetails', () => TeslaCarDetails);
 Navigation.registerComponent('HomePage', () => App);
 Navigation.registerComponent('Drawer', () => Drawer);
 Navigation.events().registerAppLaunchedListener(() => {
+  Navigation.setDefaultOptions({
+    topBar: {
+      visible: false,
+      drawBehind: true,
+      animate: false
+    }
+  });
+
   Navigation.setRoot({
     root: {
       sideMenu: {

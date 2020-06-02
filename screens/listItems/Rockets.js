@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Dimensions,
   RefreshControl,
+  ImageBackground
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
@@ -136,21 +137,21 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: '#01142F',
-    fontWeight: 'bold',
     margin: 15,
     fontSize: 20,
     backgroundColor: '#ccc',
     textAlign: 'center',
+    fontFamily: 'LuckiestGuy-Regular',
   },
   row: {
     justifyContent: 'space-around',
   },
   h1: {
     color: '#01142F',
-    fontWeight: 'bold',
     margin: 15,
     fontSize: 30,
     textAlign: 'center',
+    fontFamily: 'LuckiestGuy-Regular'
   },
 });
 export default Rockets;

@@ -131,11 +131,11 @@ const styles = StyleSheet.create({
     color: '#01142F',
     margin: 15,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Christopher-Done',
   },
   h1: {
     color: '#01142F',
-    fontWeight: 'bold',
+    fontFamily: 'Christopher-Done',
     margin: 15,
     fontSize: 30,
     textAlign: 'center',
