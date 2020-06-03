@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Navigation} from 'react-native-navigation';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Image} from 'react-native';
 import DrawerButton from '../../components/DrawerButton';
 
 
@@ -98,6 +98,10 @@ class Drawer extends Component {
             }
           />
         </View>
+        <Image
+          source={require('../../assets/img/rocket.gif')}
+          style={{marginLeft: 40}}>
+        </Image>
       </View>
     );
   }
@@ -111,20 +115,20 @@ const styles = StyleSheet.create({
   },
   textFormat: {
     color: '#01142F',
-    fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 25,
     paddingLeft: 10,
     paddingBottom: 15,
+    fontFamily: 'Christopher-Done',
   },
   spacex: {
     color: '#01142F',
-    fontWeight: "bold",
     fontSize: 30,
     textAlign: 'center',
     marginBottom: 30,
     paddingBottom: 15,
     borderBottomColor: '#01142F',
     borderBottomWidth: 1,
+    fontFamily: 'Christopher-Done',
   }
 });
 

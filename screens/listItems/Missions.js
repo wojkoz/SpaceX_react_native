@@ -1,29 +1,65 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  RefreshControl,
+} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
+import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
 import {getJSONFromApi} from '../../presenter/Presenter';
+import {loadData, saveData, keys} from '../../utils/Storage';
 
 class Missions extends Component {
   constructor() {
     super();
     this.state = {
       data: [{mission_id: 'id1', mission_name: 'empty'}],
+      refreshing: false,
+      isConnected: false,
     };
-    this.observer = {};
+    this.observer = 0;
   }
 
-  componentDidMount() {
-    this.observer = getJSONFromApi('missions').subscribe({
-      next: item =>
-        this.setState({
-          data: item,
-        }),
+  checkConnectionAndFetch() {
+    checkNetworkConnection().then(value => {
+      this.setState({
+        isConnected: value,
+      });
+      if (this.state.isConnected) {
+        this.setDataObserver();
+      } else {
+        loadData(keys.list.missions).then(value => {
+          this.setState({
+            data: value,
+          });
+        });
+      }
     });
   }
 
+  setDataObserver = () => {
+    this.observer = getJSONFromApi('missions').subscribe({
+      next: item => {
+        this.setState({
+          data: item,
+        }),
+          saveData(keys.list.missions, this.state.data).then();
+      },
+    });
+  };
+
+  componentDidMount() {
+    this.checkConnectionAndFetch();
+  }
+
   componentWillUnmount() {
-    this.observer.unsubscribe();
+    if (this.observer !== 0) {
+      this.observer.unsubscribe();
+    }
   }
 
   goToDetail = item => {
@@ -31,7 +67,7 @@ class Missions extends Component {
       component: {
         name: 'MissionDetails',
         passProps: {
-          url: 'missions/' + item.mission_id,
+          data: item,
         },
         options: {
           topBar: {
@@ -41,6 +77,18 @@ class Missions extends Component {
           },
         },
       },
+    });
+  };
+
+  myOnRefresh = () => {
+    this.setState({
+      refreshing: true,
+    });
+
+    this.checkConnectionAndFetch();
+
+    this.setState({
+      refreshing: false,
     });
   };
 
@@ -55,10 +103,18 @@ class Missions extends Component {
               style={styles.cardStyle}
               key={item.mission_id}
               onPress={() => this.goToDetail(item)}>
-              <Text style={styles.textStyle} key={item.mission_id}>{item.mission_name}</Text>
+              <Text style={styles.textStyle} key={item.mission_id}>
+                {item.mission_name}
+              </Text>
             </TouchableOpacity>
           )}
           keyExtractor={item => item.mission_name}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.myOnRefresh}
+            />
+          }
         />
       </View>
     );
@@ -71,18 +127,18 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     borderBottomWidth: 1,
   },
-  textStyle:{
+  textStyle: {
     color: '#01142F',
     margin: 15,
     fontSize: 18,
-    fontWeight: 'bold'
+    fontFamily: 'Christopher-Done',
   },
-  h1:{
+  h1: {
     color: '#01142F',
-    fontWeight: 'bold',
+    fontFamily: 'Christopher-Done',
     margin: 15,
     fontSize: 30,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 export default Missions;

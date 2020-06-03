@@ -1,28 +1,67 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, FlatList,StyleSheet, Dimensions} from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  Dimensions,
+  RefreshControl,
+  ImageBackground
+} from 'react-native';
 import {Navigation} from 'react-native-navigation';
+
+import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
 import {getJSONFromApi} from '../../presenter/Presenter';
+import {loadData, saveData, keys} from '../../utils/Storage';
 class Rockets extends Component {
   constructor() {
     super();
 
     this.state = {
       data: [{rocket_id: 'empty', rocket_name: 'empty'}],
+      refreshing: false,
+      isConnected: false,
     };
-    this.observer = {};
+    this.observer = 0;
   }
 
-  componentDidMount() {
-    this.observer = getJSONFromApi('rockets').subscribe({
-      next: item =>
-        this.setState({
-          data: item,
-        }),
+  checkConnectionAndFetch() {
+    checkNetworkConnection().then(value => {
+      this.setState({
+        isConnected: value,
+      });
+      if (this.state.isConnected) {
+        this.setDataObserver();
+      } else {
+        loadData(keys.list.rockets).then(value => {
+          this.setState({
+            data: value,
+          });
+        });
+      }
     });
   }
 
+  setDataObserver = () => {
+    this.observer = getJSONFromApi('rockets').subscribe({
+      next: item => {
+        this.setState({
+          data: item,
+        }),
+          saveData(keys.list.rockets, this.state.data).then();
+      },
+    });
+  };
+
+  componentDidMount() {
+    this.checkConnectionAndFetch();
+  }
+
   componentWillUnmount() {
-    this.observer.unsubscribe();
+    if (this.observer !== 0) {
+      this.observer.unsubscribe();
+    }
   }
 
   goToDetail = item => {
@@ -30,7 +69,7 @@ class Rockets extends Component {
       component: {
         name: 'RocketDetails',
         passProps: {
-          url: 'rockets/' + item.rocket_id,
+          data: item,
         },
         options: {
           topBar: {
@@ -43,23 +82,43 @@ class Rockets extends Component {
     });
   };
 
+  myOnRefresh = () => {
+    this.setState({
+      refreshing: true,
+    });
+
+    this.checkConnectionAndFetch();
+
+    this.setState({
+      refreshing: false,
+    });
+  };
+
   render() {
     return (
       <View>
         <Text style={styles.h1}>Rockets</Text>
         <FlatList
-          columnWrapperStyle = {styles.row}
-          numColumns = '2'
+          columnWrapperStyle={styles.row}
+          numColumns="2"
           data={this.state.data}
           renderItem={({item}) => (
-              <TouchableOpacity
+            <TouchableOpacity
               style={styles.cardStyle}
               key={item.rocket_id}
               onPress={() => this.goToDetail(item)}>
-              <Text style={styles.textStyle} key={item.rocket_id}>{item.rocket_name}</Text>
+              <Text style={styles.textStyle} key={item.rocket_id}>
+                {item.rocket_name}
+              </Text>
             </TouchableOpacity>
           )}
           keyExtractor={item => item.rocket_name}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.myOnRefresh}
+            />
+          }
         />
       </View>
     );
@@ -71,28 +130,28 @@ const styles = StyleSheet.create({
     padding: 8,
     textAlign: 'center',
     backgroundColor: '#ccc',
-    width: Dimensions.get('window').width/2-20,
+    width: Dimensions.get('window').width / 2 - 20,
     borderWidth: 1,
     borderRadius: 12,
-    marginTop: 35
+    marginTop: 35,
   },
-  textStyle:{
+  textStyle: {
     color: '#01142F',
-    fontWeight: 'bold',
     margin: 15,
     fontSize: 20,
     backgroundColor: '#ccc',
     textAlign: 'center',
+    fontFamily: 'LuckiestGuy-Regular',
   },
-  row:{
+  row: {
     justifyContent: 'space-around',
   },
-  h1:{
+  h1: {
     color: '#01142F',
-    fontWeight: 'bold',
     margin: 15,
     fontSize: 30,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+    fontFamily: 'LuckiestGuy-Regular'
+  },
 });
 export default Rockets;

@@ -3,7 +3,6 @@
 
 import {Navigation} from 'react-native-navigation';
 import App from './App';
-import React from 'react-native';
 
 import HistoricalEvents from './screens/listItems/HistoricalEvents';
 import Launches from './screens/listItems/Launches';
@@ -17,7 +16,6 @@ import RocketDetails from './screens/oneItem/RocketDetails';
 import TeslaCarDetails from './screens/oneItem/TeslaCarDetails';
 
 import Drawer from './screens/drawer/Drawer';
-import { createIconSet } from 'react-native-vector-icons';
 
 //list
 Navigation.registerComponent('HistoricalEvents', () => HistoricalEvents);
@@ -36,6 +34,14 @@ Navigation.registerComponent('TeslaCarDetails', () => TeslaCarDetails);
 Navigation.registerComponent('HomePage', () => App);
 Navigation.registerComponent('Drawer', () => Drawer);
 Navigation.events().registerAppLaunchedListener(() => {
+  Navigation.setDefaultOptions({
+    topBar: {
+      visible: false,
+      drawBehind: true,
+      animate: false
+    }
+  });
+
   Navigation.setRoot({
     root: {
       sideMenu: {
@@ -52,14 +58,7 @@ Navigation.events().registerAppLaunchedListener(() => {
             children: [
               {
                 component: {
-                  name: 'HomePage',
-                  options: {
-                    topBar: {
-                      title: {
-                        text: 'Home Page',
-                      },
-                    },
-                  },
+                  name: 'HomePage'
                 },
               },
             ],
@@ -67,5 +66,15 @@ Navigation.events().registerAppLaunchedListener(() => {
         },
       },
     },
+  });
+
+  Navigation.events().registerNavigationButtonPressedListener(() => {
+    Navigation.mergeOptions('drawerId', {
+      sideMenu: {
+        left: {
+          visible: true,
+        },
+      },
+    });
   });
 });

@@ -1,29 +1,65 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  RefreshControl,
+} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
+import {checkNetworkConnection} from '../../utils/NetworkConnectivity';
 import {getJSONFromApi} from '../../presenter/Presenter';
+import {loadData, saveData, keys} from '../../utils/Storage';
 
 class Launches extends Component {
   constructor() {
     super();
     this.state = {
       data: [{flight_id: -11, mission_name: 'empty', flight_number: -1}],
+      refreshing: false,
+      isConnected: false,
     };
-    this.observer = {};
+    this.observer = 0;
   }
 
-  componentDidMount() {
-    this.observer = getJSONFromApi('launches').subscribe({
-      next: item =>
-        this.setState({
-          data: item,
-        }),
+  checkConnectionAndFetch() {
+    checkNetworkConnection().then(value => {
+      this.setState({
+        isConnected: value,
+      });
+      if (this.state.isConnected) {
+        this.setDataObserver();
+      } else {
+        loadData(keys.list.launches).then(value => {
+          this.setState({
+            data: value,
+          });
+        });
+      }
     });
   }
 
+  setDataObserver = () => {
+    this.observer = getJSONFromApi('launches').subscribe({
+      next: item => {
+        this.setState({
+          data: item,
+        }),
+          saveData(keys.list.launches, this.state.data).then();
+      },
+    });
+  };
+
+  componentDidMount() {
+    this.checkConnectionAndFetch();
+  }
+
   componentWillUnmount() {
-    this.observer.unsubscribe();
+    if (this.observer !== 0) {
+      this.observer.unsubscribe();
+    }
   }
 
   goToDetail = item => {
@@ -31,7 +67,7 @@ class Launches extends Component {
       component: {
         name: 'LaunchDetails',
         passProps: {
-          url: 'launches/' + item.flight_number,
+          data: item,
         },
         options: {
           topBar: {
@@ -41,6 +77,18 @@ class Launches extends Component {
           },
         },
       },
+    });
+  };
+
+  myOnRefresh = () => {
+    this.setState({
+      refreshing: true,
+    });
+
+    this.checkConnectionAndFetch();
+
+    this.setState({
+      refreshing: false,
     });
   };
 
@@ -61,6 +109,12 @@ class Launches extends Component {
             </TouchableOpacity>
           )}
           keyExtractor={item => item.mission_name}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.myOnRefresh}
+            />
+          }
         />
       </View>
     );
@@ -73,18 +127,18 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     borderBottomWidth: 1,
   },
-  textStyle:{
+  textStyle: {
     color: '#01142F',
     margin: 15,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'LuckiestGuy-Regular',
   },
-  h1:{
+  h1: {
     color: '#01142F',
-    fontWeight: 'bold',
+    fontFamily: 'LuckiestGuy-Regular',
     margin: 15,
     fontSize: 30,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 export default Launches;
