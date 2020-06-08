@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Navigation} from 'react-native-navigation';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {Text, View, StyleSheet, Image, Dimensions} from 'react-native';
 import DrawerButton from '../../components/DrawerButton';
 
 
@@ -9,7 +9,8 @@ class Drawer extends Component {
     super();
     this.state = {
       active: {
-        HistoricalEvents: true,
+        HomePage: false,
+        HistoricalEvents: false,
         Launches: false,
         Missions: false,
         Rockets: false,
@@ -55,7 +56,12 @@ class Drawer extends Component {
     return (
       <View style={styles.drawer}>
         <View>
-          <Text style={styles.spacex}>SpaceX</Text>
+        <DrawerButton 
+            style={styles.spacex}
+            disable={this.state.active.HomePage}
+            title="Spacex"
+            navigateTo={() => this.navigateToScreen('HomePage')}
+          />
         </View>
         <View>
           <DrawerButton 
@@ -71,7 +77,7 @@ class Drawer extends Component {
             disable={this.state.active.HistoricalEvents}
             title="Historical Events"
             navigateTo={() =>
-              this.navigateToScreen('HistoricalEvents', 'Historical Events')
+              this.navigateToScreen('HistoricalEvents')
             }
           />
           <DrawerButton
@@ -121,6 +127,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Christopher-Done',
   },
   spacex: {
+    width: 325,
     color: '#01142F',
     fontSize: 30,
     textAlign: 'center',
