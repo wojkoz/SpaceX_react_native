@@ -17,7 +17,7 @@
     "react-native-elements": "^2.0.0",
     "react-native-navigation": "^6.1.1",
     "react-native-vector-icons": "^6.6.0",
-    "react-native-webview": "^9.4.0",
+    "react-native-webview": "^11.0.0",
     "react-native-youtube-iframe": "^1.2.4",
     "rxjs": "^6.5.4",
     "styled-components": "^5.1.0"
